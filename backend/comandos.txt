@@ -1,0 +1,3 @@
+// Rodar migrations
+npx prisma migrate dev --name init_users
+npx prisma generate

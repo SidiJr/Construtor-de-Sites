@@ -1,0 +1,18 @@
+# Node modules
+**/node_modules/
+
+# Logs
+**/logs/
+*.log
+
+# Environment variables
+**/.env
+**/.env.local
+
+# Prisma
+**/prisma/dev.db
+**/prisma/migrations/**
+
+# Build outputs
+**/dist/
+**/.next/
