@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -14,10 +8,48 @@ datasource db {
 }
 
 model Usuario {
-  id        Int      @id @default(autoincrement()) // chave primária auto increment
-  nome      String // nome do usuário
-  email     String   @unique // email único
-  senha     String // senha (criptografia será no backend)
-  createdAt DateTime @default(now()) // data de criação
-  updatedAt DateTime @updatedAt // data de atualização automática
+  id        Int      @id @default(autoincrement())
+  nome      String
+  email     String   @unique
+  senha     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  sites     Site[]
+}
+
+model Site {
+  id        Int      @id @default(autoincrement())
+  nome      String
+  dominio   String?
+  usuarioId Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  usuario   Usuario  @relation(fields: [usuarioId], references: [id])
+  paginas   Pagina[]
+}
+
+model Pagina {
+  id          Int          @id @default(autoincrement())
+  titulo      String
+  slug        String
+  siteId      Int
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  site         Site          @relation(fields: [siteId], references: [id])
+  componentes  Componente[]
+}
+
+model Componente {
+  id             Int      @id @default(autoincrement())
+  nome           String
+  tipo           String
+  configuracoes  Json?
+  ordem          Int
+  fixo           Boolean  @default(false)
+  paginaId       Int?
+
+  pagina         Pagina?  @relation(fields: [paginaId], references: [id])
 }
