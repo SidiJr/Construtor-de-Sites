@@ -8,6 +8,7 @@ import {
   FieldSeparator,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import Link from "next/link";
 
 export function LoginForm({
   className,
@@ -50,9 +51,9 @@ export function LoginForm({
         <Field>
           <FieldDescription className="text-center">
             Ainda não tem uma conta?{" "}
-            <a href="#" className="underline underline-offset-4">
+            <Link className="underline underline-offset-4" href="/signup">
               Cadastre-se
-            </a>
+            </Link>
           </FieldDescription>
         </Field>
       </FieldGroup>
