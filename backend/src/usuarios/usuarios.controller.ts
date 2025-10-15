@@ -2,43 +2,36 @@ import {
   Controller,
   Post,
   Get,
-  Patch,
-  Delete,
   Param,
   Body,
+  Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { UsuariosService } from './usuarios.service';
-import { CriarUsuarioDto } from './dto/criar-usuario.dto';
-import { AtualizarUsuarioDto } from './dto/atualizar-usuario.dto';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @Controller('usuarios')
 export class UsuariosController {
-  constructor(private usuariosService: UsuariosService) {}
+  constructor(private readonly usuariosService: UsuariosService) {}
 
   @Post()
-  criar(@Body() criarUsuarioDto: CriarUsuarioDto) {
-    const { nome, email, senha } = criarUsuarioDto;
-    return this.usuariosService.criar(nome, email, senha);
+  criar(@Body() body: { nome: string; email: string; senha: string }) {
+    return this.usuariosService.criar(body.nome, body.email, body.senha);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get()
   listar() {
     return this.usuariosService.listar();
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
   buscarPorId(@Param('id') id: string) {
     return this.usuariosService.buscarPorId(Number(id));
   }
 
-  @Patch(':id')
-  atualizar(
-    @Param('id') id: string,
-    @Body() atualizarUsuarioDto: AtualizarUsuarioDto,
-  ) {
-    return this.usuariosService.atualizar(Number(id), atualizarUsuarioDto);
-  }
-
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   deletar(@Param('id') id: string) {
     return this.usuariosService.deletar(Number(id));
