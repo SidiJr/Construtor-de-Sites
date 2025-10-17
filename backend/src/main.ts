@@ -8,7 +8,7 @@ async function bootstrap() {
     origin: allowedOrigin,
     credentials: true,
   });
-  await app.listen(process.env.PORT ?? 3000);
+  await app.listen(process.env.PORT ?? 8080);
 }
 bootstrap()
   .then(() => console.log('App iniciado com sucesso'))
