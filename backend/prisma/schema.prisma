@@ -39,17 +39,13 @@ model Pagina {
   updatedAt   DateTime      @updatedAt
 
   site         Site          @relation(fields: [siteId], references: [id])
-  componentes  Componente[]
 }
 
 model Componente {
-  id             Int      @id @default(autoincrement())
+  id             Int       @id @default(autoincrement())
   nome           String
-  tipo           String
+  tipo           Int
   configuracoes  Json?
-  ordem          Int
-  fixo           Boolean  @default(false)
-  paginaId       Int?
-
-  pagina         Pagina?  @relation(fields: [paginaId], references: [id])
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
 }
