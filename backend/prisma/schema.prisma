@@ -41,10 +41,16 @@ model Pagina {
   site         Site          @relation(fields: [siteId], references: [id])
 }
 
+enum TipoComponente {
+  TITULO
+  TEXTO
+  TITULO_TEXTO
+}
+
 model Componente {
   id             Int       @id @default(autoincrement())
   nome           String
-  tipo           Int
+  tipo           TipoComponente
   configuracoes  Json?
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
