@@ -64,7 +64,7 @@ const data = {
       icon: Command,
       items: [
         { title: "Todos os Componentes", url: "/componentes" },
-        { title: "Criar Componente", url: "/componentes" },
+        { title: "Criar Componente", url: "/componentes/novo" },
       ],
     },
   ],

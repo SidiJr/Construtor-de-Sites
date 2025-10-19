@@ -7,18 +7,15 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { api } from "@/lib/api";
 import Link from "next/link";
+import { toast } from "sonner";
 
 export default function SignupPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
 
   // Função que será passada para o SignupForm
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setError(null);
-    setSuccess(null);
     setLoading(true);
 
     const form = e.currentTarget;
@@ -31,7 +28,7 @@ export default function SignupPage() {
     ).value;
 
     if (senha !== confirm) {
-      setError("As senhas não coincidem.");
+      toast.error("As senhas não coincidem.");
       setLoading(false);
       return;
     }
@@ -49,13 +46,12 @@ export default function SignupPage() {
         throw new Error(data.message || "Erro ao criar conta.");
       }
 
-      setSuccess("Conta criada com sucesso! Redirecionando...");
       setTimeout(() => router.push("/login"), 2000);
     } catch (err: unknown) {
       if (err instanceof Error) {
-        setError(err.message);
+        toast.error(err.message);
       } else {
-        setError(String(err));
+        toast.error(String(err));
       }
     } finally {
       setLoading(false);
@@ -80,14 +76,6 @@ export default function SignupPage() {
             {loading && (
               <p className="text-sm text-gray-500 text-center mt-4">
                 Criando conta...
-              </p>
-            )}
-            {error && (
-              <p className="text-sm text-red-500 text-center mt-4">{error}</p>
-            )}
-            {success && (
-              <p className="text-sm text-green-600 text-center mt-4">
-                {success}
               </p>
             )}
           </div>
