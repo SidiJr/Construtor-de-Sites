@@ -39,11 +39,10 @@ CREATE TABLE `Pagina` (
 CREATE TABLE `Componente` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `nome` VARCHAR(191) NOT NULL,
-    `tipo` VARCHAR(191) NOT NULL,
+    `tipo` ENUM('TITULO', 'TEXTO', 'TITULO_TEXTO') NOT NULL,
     `configuracoes` JSON NULL,
-    `ordem` INTEGER NOT NULL,
-    `fixo` BOOLEAN NOT NULL DEFAULT false,
-    `paginaId` INTEGER NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -53,6 +52,3 @@ ALTER TABLE `Site` ADD CONSTRAINT `Site_usuarioId_fkey` FOREIGN KEY (`usuarioId`
 
 -- AddForeignKey
 ALTER TABLE `Pagina` ADD CONSTRAINT `Pagina_siteId_fkey` FOREIGN KEY (`siteId`) REFERENCES `Site`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `Componente` ADD CONSTRAINT `Componente_paginaId_fkey` FOREIGN KEY (`paginaId`) REFERENCES `Pagina`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
