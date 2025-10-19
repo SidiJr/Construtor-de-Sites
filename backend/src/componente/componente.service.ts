@@ -12,10 +12,6 @@ export class ComponenteService {
       data: createComponenteDto,
     });
 
-    if (!componente) {
-      throw new NotFoundException(`Ocorreu um erro ao criar o componente.`);
-    }
-
     return {
       data: componente,
       status: 'success',
@@ -26,10 +22,6 @@ export class ComponenteService {
 
   async findAll() {
     const componentes = await this.prisma.componente.findMany();
-
-    if (!componentes) {
-      throw new NotFoundException(`Ocorreu um erro ao buscar os componentes.`);
-    }
 
     return {
       data: componentes,
@@ -45,7 +37,7 @@ export class ComponenteService {
     });
 
     if (!componente) {
-      throw new NotFoundException(`Componente não encontrado.`);
+      throw new NotFoundException('Componente não encontrado.');
     }
 
     return {
@@ -62,7 +54,7 @@ export class ComponenteService {
     });
 
     if (!componenteExistente) {
-      throw new NotFoundException(`Componente não encontrado.`);
+      throw new NotFoundException('Componente não encontrado.');
     }
 
     const componenteAtualizado = await this.prisma.componente.update({
@@ -84,7 +76,7 @@ export class ComponenteService {
     });
 
     if (!componenteExistente) {
-      throw new NotFoundException(`Componente com não encontrado.`);
+      throw new NotFoundException('Componente não encontrado.');
     }
 
     await this.prisma.componente.delete({
