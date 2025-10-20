@@ -23,6 +23,7 @@ export default function BaseTable({
   columns,
   customMask = {},
 }: BaseTableProps) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [data, setData] = useState<Record<string, any>[] | null>(null);
 
   useEffect(() => {
@@ -58,6 +59,7 @@ export default function BaseTable({
               {column.charAt(0).toUpperCase() + column.slice(1)}
             </TableHead>
           ))}
+         <TableHead>Ações</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -83,6 +85,7 @@ export default function BaseTable({
                   mask && mask[value] ? mask[value] : String(value);
                 return <TableCell key={col}>{displayValue}</TableCell>;
               })}
+              <TableCell></TableCell>
             </TableRow>
           ))
         )}
