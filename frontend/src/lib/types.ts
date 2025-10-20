@@ -9,3 +9,9 @@ export type FieldConfig = {
   options?: FieldOption[];
   optionsLabel?: string;
 };
+
+export const tipoComponente = {
+  TEXTO: "Texto",
+  TITULO: "Título",
+  TITULO_TEXTO: "Título e Texto",
+}

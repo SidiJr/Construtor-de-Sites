@@ -1,12 +1,12 @@
 import { BaseForm } from "@/components/BaseForm/BaseForm";
 import { FormProvider } from "@/contexts/FormContext";
-import { FieldConfig } from "@/lib/types";
+import { FieldConfig, tipoComponente } from "@/lib/types";
 
 export default function ComponenteNovo() {
   const tipoOptions = [
-    { label: "Título", value: "TITULO" },
-    { label: "Texto", value: "TEXTO" },
-    { label: "Título e Texto", value: "TITULO_TEXTO" },
+    { label: tipoComponente.TITULO, value: "TITULO" },
+    { label: tipoComponente.TEXTO, value: "TEXTO" },
+    { label: tipoComponente.TITULO_TEXTO, value: "TITULO_TEXTO" },
   ];
 
   const fields: FieldConfig[] = [
