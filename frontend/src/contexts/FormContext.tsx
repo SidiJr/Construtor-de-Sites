@@ -20,11 +20,26 @@ export const FormProvider = ({
   initialValues?: FormValues;
 }) => {
   const [values, setValues] = useState<FormValues>(initialValues);
+  console.log(values);
 
   const setValue = (name: string, value: any) => {
-    setValues((prev) => ({ ...prev, [name]: value }));
-  };
+    setValues((prev) => {
+      const keys = name.split(".");
+      const newValues = { ...prev };
+      let current: any = newValues;
 
+      for (let i = 0; i < keys.length - 1; i++) {
+        const key = keys[i];
+        if (!current[key] || typeof current[key] !== "object") {
+          current[key] = {};
+        }
+        current = current[key];
+      }
+
+      current[keys[keys.length - 1]] = value;
+      return newValues;
+    });
+  };
 
   return (
     <FormContext.Provider value={{ values, setValue }}>

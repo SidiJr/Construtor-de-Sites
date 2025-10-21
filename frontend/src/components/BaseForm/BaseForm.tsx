@@ -23,9 +23,10 @@ type BaseFormProps = {
   fields: FieldConfig[];
   route: string;
   redirect?: string;
+  children?: React.ReactNode;
 };
 
-export function BaseForm({ fields, route, redirect }: BaseFormProps) {
+export function BaseForm({ fields, route, redirect, children }: BaseFormProps) {
   const { values, setValue } = useForm();
   const router = useRouter();
 
@@ -55,13 +56,13 @@ export function BaseForm({ fields, route, redirect }: BaseFormProps) {
   };
 
   return (
-    <div className="w-full max-w-md">
+    <div>
       <form onSubmit={handleSubmit}>
         <FieldGroup>
           <FieldSet>
             {fields.map((field) => (
-              <Field key={field.name} className="mb-4">
-                <FieldLabel htmlFor={field.name}>{field.label}</FieldLabel>
+              <Field key={field.name}>
+                <FieldLabel htmlFor={field.name}>{`${field.label}:`}</FieldLabel>
 
                 {field.type === "textarea" ? (
                   <Textarea
@@ -112,8 +113,8 @@ export function BaseForm({ fields, route, redirect }: BaseFormProps) {
               </Field>
             ))}
           </FieldSet>
-
-          <Field orientation="horizontal" className="flex gap-2 mt-4">
+          {children}
+          <Field orientation="vertical">
             <Button type="submit">Salvar</Button>
           </Field>
         </FieldGroup>

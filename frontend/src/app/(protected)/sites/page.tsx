@@ -1,3 +1,7 @@
+import BaseTable from "@/components/BaseTable/BaseTable";
+
 export default function SiteTable() {
-    return (<div>SiteTable</div>)
+  const columns: string[] = ["id", "nome", "dominio"];
+
+  return <BaseTable route="site" columns={columns} />;
 }
