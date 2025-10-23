@@ -5,7 +5,6 @@ import ContentEditable from "../ContentEditable/ContentEditable";
 
 export default function BaseTituloTexto({
   value = "Clique para editar o título",
-  className = "",
 }: BaseComponentProps) {
   const { values, setValue } = useForm();
   const titulo = values?.configuracoes?.titulo ?? value;
