@@ -9,6 +9,8 @@ import { cn } from "@/lib/utils";
 export default function BaseTexto({ value = "Clique para editar o texto" }) {
   const { values, setValue } = useForm();
 
+  console.log(values);
+
   const campos: ConfigField[] = useMemo(
     () => [
       {
