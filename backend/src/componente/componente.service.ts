@@ -21,7 +21,11 @@ export class ComponenteService {
   }
 
   async findAll() {
-    const componentes = await this.prisma.componente.findMany();
+    const componentes = await this.prisma.componente.findMany({
+      orderBy: {
+        id: 'desc',
+      },
+    });
 
     return {
       data: componentes,

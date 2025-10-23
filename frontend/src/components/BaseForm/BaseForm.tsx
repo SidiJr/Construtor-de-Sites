@@ -70,13 +70,16 @@ export function BaseForm({
     e.preventDefault();
 
     try {
-      const metodo = id ? "PUT" : "POST";
+      const metodo = id ? "PATCH" : "POST";
       const url = id ? `${api}/${route}/${id}` : `${api}/${route}`;
+
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { id: _id, createdAt, updatedAt, ...dataToSend } = values;
 
       const res = await fetch(url, {
         method: metodo,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(values),
+        body: JSON.stringify(dataToSend),
       });
 
       const data = await res.json();
