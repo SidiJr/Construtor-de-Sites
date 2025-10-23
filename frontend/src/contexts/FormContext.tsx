@@ -20,7 +20,7 @@ export const FormProvider = ({
   initialValues?: FormValues;
 }) => {
   const [values, setValues] = useState<FormValues>(initialValues);
-  console.log(values);
+  console.log("formContext: ", values);
 
   const setValue = (name: string, value: any) => {
     setValues((prev) => {

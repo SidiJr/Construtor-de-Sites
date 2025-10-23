@@ -1,4 +1,6 @@
 "use client";
+import { Textarea } from "@/components/ui/textarea";
+import { cn } from "@/lib/utils";
 import { useEffect, useRef, useState } from "react";
 
 interface ContentEditableProps {
@@ -6,56 +8,73 @@ interface ContentEditableProps {
   onChange?: (newValue: string) => void;
   placeholder?: string;
   className?: string;
+  classNameChildren?: string;
+  style?: React.CSSProperties;
 }
 
 export default function ContentEditable({
   value,
   onChange,
-  placeholder = "Clique para editar",
+  placeholder = "Clique para editar!",
   className = "",
+  classNameChildren = "",
+  style,
 }: ContentEditableProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [content, setContent] = useState(value);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  // Atualiza o texto local quando a prop `value` muda externamente
   useEffect(() => {
     setContent(value);
   }, [value]);
 
-  // Foca no input quando entra no modo de edição
   useEffect(() => {
-    if (isEditing && inputRef.current) {
-      inputRef.current.focus();
-      inputRef.current.select();
+    if (isEditing && textareaRef.current) {
+      textareaRef.current.focus();
+      textareaRef.current.select();
+      adjustHeight();
     }
   }, [isEditing]);
+
+  const adjustHeight = () => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "auto";
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+    }
+  };
 
   const handleBlur = () => {
     setIsEditing(false);
     onChange?.(content);
   };
 
+  const handleClick = () => setIsEditing(true);
+
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setContent(e.target.value);
+    adjustHeight();
+  };
+
   return (
-    <div
-      className="inline-block"
-      onClick={() => !isEditing && setIsEditing(true)}
-    >
+    <div onClick={handleClick} className={cn("w-full flex", className)}>
       {isEditing ? (
-        <input
-          ref={inputRef}
-          type="text"
+        <Textarea
+          ref={textareaRef}
           value={content}
-          onChange={(e) => setContent(e.target.value)}
+          onChange={handleChange}
           onBlur={handleBlur}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") e.currentTarget.blur();
-          }}
+          placeholder={placeholder}
+          className={cn(
+            "resize-none overflow-hidden bg-transparent",
+            classNameChildren
+          )}
+          rows={1}
+          style={style}
         />
       ) : (
-        <span className="cursor-text">
+        <p className={cn("cursor-text", classNameChildren)} style={style}>
           {content || <span>{placeholder}</span>}
-        </span>
+        </p>
       )}
     </div>
   );

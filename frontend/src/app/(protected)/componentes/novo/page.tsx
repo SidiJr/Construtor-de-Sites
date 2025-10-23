@@ -7,10 +7,15 @@ import BaseTexto from "@/components/BaseComponentes/Texto";
 import { useMemo } from "react";
 import BaseTitulo from "@/components/BaseComponentes/Titulo";
 import BaseTituloTexto from "@/components/BaseComponentes/TituloTexto";
-import { FieldLabel, FieldSeparator } from "@/components/ui/field";
+import { FieldLabel } from "@/components/ui/field";
+import BaseSection from "@/components/BaseComponentes/UI/BaseSection";
 
 function Default() {
-  return <div className="w-full text-center">Selecione um tipo de componente!</div>;
+  return (
+    <BaseSection>
+      <p className="text-center text-base">Selecione um componente!</p>
+    </BaseSection>
+  );
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -38,9 +43,7 @@ function ComponenteNovoContent() {
         redirect="componentes"
       >
         <FieldLabel>{"Configurações do Componente:"}</FieldLabel>
-        <FieldSeparator />
         <ComponentType value="" />
-        <FieldSeparator />
       </BaseForm>
     </>
   );
