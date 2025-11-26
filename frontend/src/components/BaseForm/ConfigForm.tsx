@@ -63,7 +63,11 @@ export function ConfigForm({ fields }: ConfigFormProps) {
             <Field key={field.name}>
               <FieldLabel>{field.label}</FieldLabel>
 
-              {field.name === "configuracoes.cor" ? (
+              {[
+                "configuracoes.cor",
+                "configuracoes.tituloCor",
+                "configuracoes.textoCor",
+              ].includes(field.name) ? (
                 <ColorPickerField
                   valorAtual={valorAtual}
                   onChange={(novaCor) => setValue(field.name, novaCor)}

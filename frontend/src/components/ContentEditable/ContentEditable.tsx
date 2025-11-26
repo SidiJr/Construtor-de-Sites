@@ -10,6 +10,7 @@ interface ContentEditableProps {
   className?: string;
   classNameChildren?: string;
   style?: React.CSSProperties;
+  isViewMode?: boolean;
 }
 
 export default function ContentEditable({
@@ -19,6 +20,7 @@ export default function ContentEditable({
   className = "",
   classNameChildren = "",
   style,
+  isViewMode = false,
 }: ContentEditableProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [content, setContent] = useState(value);
@@ -57,7 +59,11 @@ export default function ContentEditable({
 
   return (
     <div onClick={handleClick} className={cn("w-full flex", className)}>
-      {isEditing ? (
+      {isViewMode ? (
+        <p className={cn("cursor-text p-10", classNameChildren)} style={style}>
+          {content || <span>{placeholder}</span>}
+        </p>
+      ) : isEditing ? (
         <Textarea
           ref={textareaRef}
           value={content}
@@ -65,14 +71,14 @@ export default function ContentEditable({
           onBlur={handleBlur}
           placeholder={placeholder}
           className={cn(
-            "resize-none overflow-hidden bg-transparent",
+            "resize-none overflow-hidden bg-transparent p-10",
             classNameChildren
           )}
           rows={1}
           style={style}
         />
       ) : (
-        <p className={cn("cursor-text", classNameChildren)} style={style}>
+        <p className={cn("cursor-text p-10", classNameChildren)} style={style}>
           {content || <span>{placeholder}</span>}
         </p>
       )}

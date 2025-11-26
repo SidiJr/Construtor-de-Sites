@@ -25,11 +25,6 @@ import Link from "next/link";
 
 // This is sample data.
 const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
   navMain: [
     {
       title: "Sites",
@@ -37,7 +32,7 @@ const data = {
       icon: SquareTerminal,
       items: [
         { title: "Todos os Sites", url: "/sites" },
-        { title: "Criar Site", url: "/sites" },
+        { title: "Criar Site", url: "/sites/novo" },
       ],
     },
     {
@@ -46,7 +41,7 @@ const data = {
       icon: Frame,
       items: [
         { title: "Todos os Layouts", url: "/layouts" },
-        { title: "Criar Layout", url: "/layouts" },
+        { title: "Criar Layout", url: "/layouts/novo" },
       ],
     },
     {
@@ -55,7 +50,7 @@ const data = {
       icon: Map,
       items: [
         { title: "Todas as Páginas", url: "/paginas" },
-        { title: "Criar Página", url: "/paginas" },
+        { title: "Criar Página", url: "/paginas/novo" },
       ],
     },
     {
@@ -82,8 +77,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   <GalleryVerticalEnd className="size-4" />
                 </div>
                 <div className="flex flex-col gap-0.5 leading-none">
-                  <span className="font-medium">Documentation</span>
-                  <span className="">v1.0.0</span>
+                  <span className="font-medium">Construtor de Sites</span>
                 </div>
               </Link>
             </SidebarMenuButton>
@@ -94,7 +88,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavMain items={data.navMain} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

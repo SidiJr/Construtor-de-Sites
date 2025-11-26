@@ -4,6 +4,8 @@ export const tipoOptions = [
   { label: tipoComponente.TITULO, value: "TITULO" },
   { label: tipoComponente.TEXTO, value: "TEXTO" },
   { label: tipoComponente.TITULO_TEXTO, value: "TITULO_TEXTO" },
+  { label: tipoComponente.NAVBAR, value: "NAVBAR" },
+  { label: tipoComponente.FOOTER, value: "FOOTER" },
 ];
 
 export const componenteFields: FieldConfig[] = [

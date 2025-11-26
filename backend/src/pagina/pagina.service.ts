@@ -8,21 +8,41 @@ export class PaginaService {
   constructor(private prisma: PrismaService) {}
 
   async create(createPaginaDto: CreatePaginaDto) {
-    const { siteId, componentesIds, ...rest } = createPaginaDto;
+    const { siteId, layoutId, componentes, ...rest } = createPaginaDto;
 
     const pagina = await this.prisma.pagina.create({
       data: {
         ...rest,
-        site: { connect: { id: siteId } },
-        componentes: componentesIds
-          ? { connect: componentesIds.map((id) => ({ id })) }
-          : undefined,
+        ...(siteId ? { site: { connect: { id: siteId } } } : {}),
+        ...(layoutId ? { layout: { connect: { id: layoutId } } } : {}),
       },
-      include: { componentes: true, site: true },
+    });
+
+    // inserir componentes na página
+    if (componentes?.length) {
+      await this.prisma.paginaComponente.createMany({
+        data: componentes.map((c) => ({
+          paginaId: pagina.id,
+          componenteId: c.componenteId,
+          ordem: c.ordem,
+        })),
+      });
+    }
+
+    const paginaComRelacionamentos = await this.prisma.pagina.findUnique({
+      where: { id: pagina.id },
+      include: {
+        site: true,
+        layout: true,
+        componentesComPagina: {
+          include: { componente: true },
+          orderBy: { ordem: 'asc' },
+        },
+      },
     });
 
     return {
-      data: pagina,
+      data: paginaComRelacionamentos,
       status: 'success',
       statusCode: 201,
       message: 'Página criada com sucesso!',
@@ -31,7 +51,15 @@ export class PaginaService {
 
   async findAll() {
     const paginas = await this.prisma.pagina.findMany({
-      include: { componentes: true, site: true },
+      orderBy: { id: 'desc' },
+      include: {
+        site: true,
+        layout: true,
+        componentesComPagina: {
+          include: { componente: true },
+          orderBy: { ordem: 'asc' },
+        },
+      },
     });
 
     return {
@@ -45,7 +73,14 @@ export class PaginaService {
   async findOne(id: number) {
     const pagina = await this.prisma.pagina.findUnique({
       where: { id },
-      include: { componentes: true, site: true },
+      include: {
+        site: true,
+        layout: true,
+        componentesComPagina: {
+          include: { componente: true },
+          orderBy: { ordem: 'asc' },
+        },
+      },
     });
 
     if (!pagina) throw new NotFoundException('Página não encontrada.');
@@ -59,27 +94,50 @@ export class PaginaService {
   }
 
   async update(id: number, updatePaginaDto: UpdatePaginaDto) {
-    const { siteId, componentesIds, ...rest } = updatePaginaDto;
+    const { siteId, layoutId, componentes, ...rest } = updatePaginaDto;
 
     const paginaExistente = await this.prisma.pagina.findUnique({
       where: { id },
     });
     if (!paginaExistente) throw new NotFoundException('Página não encontrada.');
 
-    const paginaAtualizada = await this.prisma.pagina.update({
+    await this.prisma.pagina.update({
       where: { id },
       data: {
         ...rest,
-        site: siteId ? { connect: { id: siteId } } : undefined,
-        componentes: componentesIds
-          ? { set: componentesIds.map((id) => ({ id })) }
-          : undefined,
+        ...(siteId ? { site: { connect: { id: siteId } } } : {}),
+        ...(layoutId ? { layout: { connect: { id: layoutId } } } : {}),
       },
-      include: { componentes: true, site: true },
+    });
+
+    if (componentes) {
+      await this.prisma.paginaComponente.deleteMany({
+        where: { paginaId: id },
+      });
+
+      await this.prisma.paginaComponente.createMany({
+        data: componentes.map((c) => ({
+          paginaId: id,
+          componenteId: c.componenteId,
+          ordem: c.ordem,
+        })),
+      });
+    }
+
+    const full = await this.prisma.pagina.findUnique({
+      where: { id },
+      include: {
+        site: true,
+        layout: true,
+        componentesComPagina: {
+          include: { componente: true },
+          orderBy: { ordem: 'asc' },
+        },
+      },
     });
 
     return {
-      data: paginaAtualizada,
+      data: full,
       status: 'success',
       statusCode: 200,
       message: 'Página atualizada com sucesso!',

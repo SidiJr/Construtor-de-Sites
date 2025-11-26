@@ -30,22 +30,41 @@ model Site {
   paginas   Pagina[]
 }
 
+model Layout {
+  id           Int           @id @default(autoincrement())
+  nome         String
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  componentes  Componente[]  @relation("LayoutComponentes")
+  paginas      Pagina[]
+}
+
 model Pagina {
   id          Int          @id @default(autoincrement())
   titulo      String
   endereco    String
-  siteId      Int
+  siteId      Int?
+  layoutId    Int?
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
 
-  site         Site          @relation(fields: [siteId], references: [id])
-  componentes Componente[]  @relation("PaginaComponentes")
+  site         Site?          @relation(fields: [siteId], references: [id])
+  layout       Layout?       @relation(fields: [layoutId], references: [id])
+  componentesComPagina PaginaComponente[]
 }
 
 enum TipoComponente {
   TITULO
   TEXTO
+  IMAGEM
   TITULO_TEXTO
+  TITULO_IMAGEM
+  TEXTO_IMAGEM
+  TITULO_TEXTO_IMAGEM
+  FOOTER
+  NAVBAR
+  CONTATO
 }
 
 model Componente {
@@ -56,5 +75,19 @@ model Componente {
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
 
-  paginas        Pagina[]        @relation("PaginaComponentes")
+  paginasComponente PaginaComponente[]
+  layouts Layout[] @relation("LayoutComponentes")
+}
+
+model PaginaComponente {
+  id            Int         @id @default(autoincrement())
+  paginaId      Int
+  componenteId  Int
+  ordem         Int
+
+  pagina        Pagina      @relation(fields: [paginaId], references: [id])
+  componente    Componente  @relation(fields: [componenteId], references: [id])
+
+  @@unique([paginaId, ordem])
+  @@unique([paginaId, componenteId])
 }

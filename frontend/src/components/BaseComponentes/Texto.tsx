@@ -6,10 +6,23 @@ import { ConfigField, ConfigForm } from "../BaseForm/ConfigForm";
 import { useMemo } from "react";
 import { cn } from "@/lib/utils";
 
-export default function BaseTexto({ value = "Clique para editar o texto" }) {
+export default function BaseTexto({
+  value = "Clique para editar o texto",
+  isViewMode = false,
+  configuracoes = {},
+}: {
+  value?: string;
+  isViewMode?: boolean;
+  configuracoes?: {
+    texto?: string;
+    posicao?: string;
+    tamanho?: string;
+    alinhamento?: string;
+    cor?: string;
+  } | null;
+}) {
   const { values, setValue } = useForm();
-
-  console.log(values);
+  console.log("aqui:", configuracoes);
 
   const campos: ConfigField[] = useMemo(
     () => [
@@ -65,25 +78,33 @@ export default function BaseTexto({ value = "Clique para editar o texto" }) {
   );
 
   const texto = useMemo(
-    () => values?.configuracoes?.texto ?? value,
-    [values?.configuracoes?.texto, value]
+    () => configuracoes?.texto ?? values?.configuracoes?.texto ?? value,
+    [configuracoes?.texto, values?.configuracoes?.texto, value]
   );
 
   const posicaoClasse = useMemo(() => {
-    return values?.configuracoes?.posicao || "text-center";
-  }, [values?.configuracoes?.posicao]);
+    return (
+      configuracoes?.posicao ?? values?.configuracoes?.posicao ?? "text-center"
+    );
+  }, [configuracoes?.posicao, values?.configuracoes?.posicao]);
 
   const tamanhoClasse = useMemo(() => {
-    return values?.configuracoes?.tamanho || "text-base";
-  }, [values?.configuracoes?.tamanho]);
+    return (
+      configuracoes?.tamanho ?? values?.configuracoes?.tamanho ?? "text-base"
+    );
+  }, [configuracoes?.tamanho, values?.configuracoes?.tamanho]);
 
   const alinhamentoClasse = useMemo(() => {
-    return values?.configuracoes?.alinhamento || "text-left";
-  }, [values?.configuracoes?.alinhamento]);
+    return (
+      configuracoes?.alinhamento ??
+      values?.configuracoes?.alinhamento ??
+      "text-left"
+    );
+  }, [configuracoes?.alinhamento, values?.configuracoes?.alinhamento]);
 
   const corClasse = useMemo(() => {
-    return values?.configuracoes?.cor || "#000000";
-  }, [values?.configuracoes?.cor]);
+    return configuracoes?.cor ?? values?.configuracoes?.cor ?? "#000000";
+  }, [configuracoes?.cor, values?.configuracoes?.cor]);
 
   return (
     <>
@@ -94,9 +115,10 @@ export default function BaseTexto({ value = "Clique para editar o texto" }) {
           className={cn(posicaoClasse)}
           classNameChildren={cn(tamanhoClasse, alinhamentoClasse)}
           style={{ color: corClasse }}
+          isViewMode={isViewMode}
         />
       </BaseSection>
-      <ConfigForm fields={campos} />
+      {!isViewMode && <ConfigForm fields={campos} />}
     </>
   );
 }

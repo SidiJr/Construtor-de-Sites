@@ -1,3 +1,7 @@
+import BaseTable from "@/components/BaseTable/BaseTable";
+
+const columns: string[] = ["id", "titulo"];
+
 export default function PaginaTable() {
-    return (<div>PaginaTable</div>)
+  return <BaseTable route="pagina" columns={columns} />;
 }
